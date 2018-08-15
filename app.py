@@ -1,8 +1,8 @@
 import os
 from flask import Flask, jsonify
-from heroku.taskJson import workoutJson
+from app.taskJson import workoutJson
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
-from heroku.database import database
+from app.database import database
 from sqlalchemy import create_engine, and_, distinct
 from sqlalchemy.orm import sessionmaker
 
