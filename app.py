@@ -2,7 +2,7 @@ import os
 from flask import Flask, jsonify
 from taskJson import workoutJson
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
-from app.database import database
+from heroku.database import database
 from sqlalchemy import create_engine, and_, distinct
 from sqlalchemy.orm import sessionmaker
 
