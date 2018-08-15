@@ -1,8 +1,10 @@
 import os
+import sys
+sys.path.append('/app/app.py')
 from flask import Flask, jsonify
 from taskJson import workoutJson
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
-from app.database import database
+from app.database.database import Acitvity
 from sqlalchemy import create_engine, and_, distinct
 from sqlalchemy.orm import sessionmaker
 
