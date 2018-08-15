@@ -4,7 +4,7 @@ sys.path.append('/app/app.py')
 from flask import Flask, jsonify
 from taskJson import workoutJson
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
-import database
+from database import database
 #from app.database import Acitvity
 from sqlalchemy import create_engine, and_, distinct
 from sqlalchemy.orm import sessionmaker
