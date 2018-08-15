@@ -1,6 +1,6 @@
 import os
 from flask import Flask, jsonify
-from app.taskJson import workoutJson
+from taskJson import workoutJson
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from app.database import database
 from sqlalchemy import create_engine, and_, distinct
