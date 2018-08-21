@@ -1,4 +1,5 @@
 from flask import Flask
+import os
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_migrate import Migrate
@@ -6,8 +7,17 @@ from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Boolean, f
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, Schema
 
-app = Flask(__name__)
+template_dir = os.path.join(os.path.dirname(__file__))
+new = template_dir[:-9]
+templates = new + '/templates'
+statics = new + '/static'
+#app = Flask(__name__)
+app = Flask(__name__, template_folder=templates, static_folder=statics)
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)

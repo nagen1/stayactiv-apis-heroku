@@ -1,0 +1,40 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <!--<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>-->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body>
+
+  <div class="navbar-fixed">
+    <nav style="background-color:#4a3f9c">
+      <div class="nav-wrapper">
+        <a href="{{ url_for('home') }}" class="left hide-on-med-and-down"><img src="{{ url_for('static', filename='images/navaras.png') }}" style="height:60px; width:60px; padding-left: 5px; padding-top:2px; padding-bottom: 2px;"></a>
+
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{{ url_for('activities') }}">Activities</a></li>
+            <li><a href="{{ url_for('workoutprog') }}">Workout Programs</a></li>
+          <li><a href="{{ url_for('exercises') }}">Exercises</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+        <!--   Grid Container section   -->
+        <div class="row">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+
+
+      <!--JavaScript at end of body for optimized loading-->
+      <!--<script type="text/javascript" src="js/materialize.min.js"></script>-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+    </body>
+  </html>
