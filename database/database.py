@@ -1,29 +1,10 @@
-# from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Boolean, func
-# from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-# from sqlalchemy import create_engine
-# import sys
-#
-# Base = declarative_base()
-#
-# class Activities(Base):
-#     __tablename__ = 'activities'
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String(30), nullable=False)
-#
-#
-# engine = create_engine('sqlite://stayactiv-v1.db')
-# Base.metadata.creaet_all(engine)
-
-
 from flask import Flask
-from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_migrate import Migrate
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Boolean, func
 from flask_marshmallow import Marshmallow
-from marshmallow import fields
+from marshmallow import fields, Schema
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
@@ -38,6 +19,13 @@ class User(db.Model):
     name = db.Column(db.String(128))
     age = db.Column(db.Integer)
 
+    def as_dict(self):
+        obj_d = {
+            'id': self.id,
+            'name': self.name,
+        }
+        return obj_d
+
 class Activity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
@@ -47,16 +35,12 @@ class Activity(db.Model):
     updateTime = db.Column(DateTime, default=datetime.utcnow)
     updatedby = db.Column(db.String(100))
 
-    # @property
-    # def serialize(self):
-    #     return {
-    #         'id': self.id,
-    #         'name': self.name
-    #     }
-
-class ActivitySchema(ma.ModelSchema):
-    class Meta:
-        model = Activity
+    def as_dict(self):
+        obj_d = {
+            'id': self.id,
+            'name': self.name,
+        }
+        return obj_d
 
 class Exercises(db.Model):
     __tablename__ = 'Exercises'
@@ -83,11 +67,25 @@ class WorkoutPrograms(db.Model):
     type = db.Column(db.String(50)) # ": "Bulking",
     weeks = db.Column(db.Integer) # ": "4"
     activity_id = db.Column(db.Integer, db.ForeignKey(Activity.id), nullable=False)
-    workoutprograms = db.relationship('Activity', backref='workoutprograms', lazy=True)
+    activity = db.relationship('Activity', backref='workoutprograms')
 
-class WorkoutProgramsSchema(ma.ModelSchema):
-    class Meta:
-        model = WorkoutPrograms
+
+    def as_dict(self):
+        obj_d = {
+            'id': self.id,
+            'name': self.name,
+            'bodyPart': self.bodyPart,
+            'difficulty': self.difficulty,
+            'duration': self.duration,
+            'frequency': self.frequency,
+            'previewLink': self.previewLink,
+            'routine': self.routine,
+            'shortDescription': self.shortDescription,
+            'type': self.type,
+            'weeks': self.weeks,
+        }
+        return obj_d
+
 
 class ProgramRoutines(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -99,7 +97,8 @@ class ProgramRoutines(db.Model):
     Sequence = db.Column(db.Integer)  # ": "1",
     Week = db.Column(db.Integer)  # ": "1"
     workoutprogram_id = db.Column(db.Integer, db.ForeignKey(WorkoutPrograms.id), nullable=False)
-    programroutine = db.relationship("WorkoutPrograms", backref='programRoutines', lazy=True)
+    workoutprograms = db.relationship("WorkoutPrograms", backref='programroutines')
+
 
 class DailyRoutines(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -115,3 +114,29 @@ class DailyRoutines(db.Model):
     Sequence = db.Column(db.Integer)# ": "1",
     Sets = db.Column(db.Integer) # ": "3",
     Type = db.Column(db.Integer, db.ForeignKey(Exercises.type), nullable=False)
+    programroutine_id = db.Column(db.Integer, db.ForeignKey(ProgramRoutines.id), nullable=False)
+    programroutine = db.relationship("ProgramRoutines", backref='dailyRoutines', lazy=True)
+
+
+class DailyRoutinesSchema(ma.ModelSchema):
+    class Meta:
+        fields = ('id', 'Difficulty', 'Duration', 'ExerciseId', 'ExerciseName', 'Muscle', 'PreviewLink',
+                  'Reps', 'RestTime', 'Routine', 'Sets', 'Type', 'programroutine_id')
+
+class ProgramRoutinesSchema(ma.ModelSchema):
+    dailyRoutines = fields.Nested(DailyRoutinesSchema, many=True)
+    class Meta:
+        fields = ('id', 'Day', 'Duration', 'Musle', 'PreviewLink',
+                  'RoutineId', 'Sequence', 'workoutprogram_id', 'Week', 'dailyRoutines')
+
+class WorkoutProgramsSchema(ma.ModelSchema):
+    programroutines = fields.Nested(ProgramRoutinesSchema, many=True)
+    class Meta:
+        fields = ('id', 'name', 'bodyPart', 'difficulty', 'duration', 'frequency', 'previewLink',
+                  'routine', 'shortDescription', 'type', 'weeks', 'activity_id', 'programroutines')
+
+class ActivitySchema(ma.ModelSchema):
+    workoutprograms = fields.Nested(WorkoutProgramsSchema, many=True)
+    class Meta:
+        fields = ("id", "name", 'iconLink', "workoutprograms")
+
