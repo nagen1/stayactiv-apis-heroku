@@ -152,7 +152,7 @@
                   "Difficulty": "Beginner",
                   "Duration": "1m",
                   "ExerciseId": "3",
-                  "ExerciseName": "\tCable Straight Arm Push Down",
+                  "ExerciseName": "Cable Straight Arm Push Down",
                   "Muscle": "Back",
                   "PreviewLink": "https://www.jefit.com/images/exercises/50_50/732.jpg",
                   "Reps": "8",
@@ -471,3 +471,49 @@
     }
   ]
 }
+
+
+
+<td align="left"> <span class="xlink">
+<a href="../4789614">
+<div style="position: relative; height: 50px; overflow: hidden; text-overflow: ellipsis">
+<img height="50" src="../forum/images/misc/unknown.gif" width="50"/> </div></a>
+</span> </td>
+
+[<td align="left"> <span class="xlink">
+<a href="../4789614">
+<div style="position: relative; height: 50px; overflow: hidden; text-overflow: ellipsis">
+<img height="50" src="../forum/images/misc/unknown.gif" width="50"/> </div></a>
+</span> </td>, <td align="left">
+<span class="xlink">
+<a href="workout-routine-database.php?id=36435">
+<div style="position: relative; width: 230px; height: 37px; overflow: hidden; text-overflow: ellipsis; font-weight:bold;">
+							B.U.F.F Dudes 12 week program week 4-6							</div>
+</a>
+</span>
+<div style="position: relative; bottom: 5px;">
+<a href="/4789614">
+            hoodebaugh        </a>
+</div>
+</td>, <td align="center">5d/w</td>, <td align="center">General</td>, <td align="center">Intermediate</td>, <td align="center">30</td>, <td align="center">899</td>, <td align="center">
+<div id="star">
+<ul class="star" id="star0">
+<li class="curr" id="starCur0" style="width: 84px;"></li>
+</ul>
+<div class="user" id="starUser0" style="color: rgb(136, 136, 136);"></div>
+<br style="clear: both;"/>
+</div> <div style="position: absolute; z-index: 99999; display: none; background-color: #FFFBCC;
+                                        width: auto; height: auto; overflow: auto; border-radius: 5px; border: solid #dddddd 1px;
+                                        text-align: justify; padding: 5px;">
+</div>
+<script>
+                                $('.declineStatus').hover(
+                                    function(){
+                                        $(this).next().css('display','block');
+                                    },
+                                    function(){
+                                        $(this).next().css('display','none');
+                                    }
+                                );
+                            </script>
+</td>]

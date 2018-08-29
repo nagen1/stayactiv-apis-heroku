@@ -11,6 +11,7 @@ template_dir = os.path.join(os.path.dirname(__file__))
 new = template_dir[:-9]
 templates = new + '/templates'
 statics = new + '/static'
+
 #app = Flask(__name__)
 app = Flask(__name__, template_folder=templates, static_folder=statics)
 
@@ -40,6 +41,7 @@ class Activity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     iconLink = db.Column(db.String(256))
+    previewLink = db.Column(db.String(256))
     createTime = db.Column(DateTime, default=datetime.utcnow)
     createdby = db.Column(db.String(100))
     updateTime = db.Column(DateTime, default=datetime.utcnow)
@@ -49,6 +51,8 @@ class Activity(db.Model):
         obj_d = {
             'id': self.id,
             'name': self.name,
+            'iconLink': self.iconLink,
+            'previewLink': self.previewLink
         }
         return obj_d
 
@@ -115,15 +119,15 @@ class DailyRoutines(db.Model):
     Difficulty = db.Column(db.Integer, db.ForeignKey(Exercises.difficulty), nullable=False)
     Duration = db.Column(db.String(4)) # ": "1m",
     ExerciseId = db.Column(db.Integer, db.ForeignKey(Exercises.id), nullable=False) # ": "2",
-    ExerciseName = db.Column(db.String, db.ForeignKey(Exercises.name), nullable=False) # ": "Barbell Bench Press",
-    Muscle = db.Column(db.Integer, db.ForeignKey(Exercises.muscle), nullable=False) # ": "Chest",
-    PreviewLink = db.Column(db.Integer, db.ForeignKey(Exercises.previewLink), nullable=False) # ": "https://www.jefit.com/images/exercises/50_50/8.jpg",
+    ExerciseName = db.Column(db.String, nullable=False) # ": "Barbell Bench Press",
+    Muscle = db.Column(db.Integer, nullable=False) # ": "Chest",
+    PreviewLink = db.Column(db.Integer, nullable=False) # ": "https://www.jefit.com/images/exercises/50_50/8.jpg",
     Reps = db.Column(db.Integer) # ": "8",
     RestTime = db.Column(db.Integer)# ": "60",
-    Routine = db.Column(db.Integer, db.ForeignKey(Exercises.routine), nullable=False) # ": "Beginner",
-    Sequence = db.Column(db.Integer)# ": "1",
+    Routine = db.Column(db.Integer, nullable=False) # ": "Beginner",
+    Sequence = db.Column(db.Integer) # ": "1",
     Sets = db.Column(db.Integer) # ": "3",
-    Type = db.Column(db.Integer, db.ForeignKey(Exercises.type), nullable=False)
+    Type = db.Column(db.Integer, nullable=False)
     programroutine_id = db.Column(db.Integer, db.ForeignKey(ProgramRoutines.id), nullable=False)
     programroutine = db.relationship("ProgramRoutines", backref='dailyRoutines', lazy=True)
 
@@ -131,7 +135,7 @@ class DailyRoutines(db.Model):
 class DailyRoutinesSchema(ma.ModelSchema):
     class Meta:
         fields = ('id', 'Difficulty', 'Duration', 'ExerciseId', 'ExerciseName', 'Muscle', 'PreviewLink',
-                  'Reps', 'RestTime', 'Routine', 'Sets', 'Type', 'programroutine_id')
+                  'Reps', 'RestTime', 'Routine', 'Sets', 'Type', 'programroutine_id', 'Sequence')
 
 class ProgramRoutinesSchema(ma.ModelSchema):
     dailyRoutines = fields.Nested(DailyRoutinesSchema, many=True)
@@ -148,5 +152,11 @@ class WorkoutProgramsSchema(ma.ModelSchema):
 class ActivitySchema(ma.ModelSchema):
     workoutprograms = fields.Nested(WorkoutProgramsSchema, many=True)
     class Meta:
-        fields = ("id", "name", 'iconLink', "workoutprograms")
+        fields = ("id", "name", 'iconLink', "previewLink", "workoutprograms")
+    # class Meta:
+    #     model = Activity
+
+class OnlyActivitiesSchema(ma.ModelSchema):
+    class Meta:
+        fields = ("id", "name", 'iconLink', "previewLink")
 

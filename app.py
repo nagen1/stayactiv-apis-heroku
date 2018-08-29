@@ -53,28 +53,51 @@ def workouts():
 @app.route('/api/v1/activities')
 def activities():
     try:
-        activlist = database.Activity.query.all()
-        activity_schema = database.ActivitySchema(many=True)
-        output = activity_schema.dump(activlist).data
-
-    except:
-        output = 'NoResultFound'
-
-    return jsonify({'Activities': output})
-
-@app.route('/api/v1/workoutprograms')
-def workoutprog():
-    try:
-        workoutprogs = database.WorkoutPrograms.query.all()
-        workout_schema = database.WorkoutProgramsSchema(many=True)
-        output = workout_schema.dump(workoutprogs).data
+        newlist = database.Activity.query.all()
+        activities_schema = database.OnlyActivitiesSchema(many=True)
+        output = activities_schema.dump(newlist).data
 
     except:
         output = "No Results Found"
 
-    return jsonify({"Workout Programs":output})
+    return jsonify({"Workout Programs": output})
 
-@app.route('/api/v1/programroutine')
+
+@app.route('/api/v1/miniJson/<int:page>', methods=['GET'])
+def minijson(page):
+    try:
+        # activlist = database.Activity.query.all()
+        # activity_schema = database.ActivitySchema(many=True)
+        # output = activity_schema.dump(activlist).data
+        newlist = []
+        allactlist = database.Activity.query.all()
+        for activity in allactlist:
+            newlist.append(database.Activity.as_dict(activity))
+        workoutprogs = database.WorkoutPrograms.query.paginate(page, 10, False)
+        records = workoutprogs.items
+        workout_schema = database.WorkoutProgramsSchema(many=True)
+        output = workout_schema.dump(records).data
+        newlist[2]['WorkoutPrograms'] = output
+
+    except:
+        output = 'NoResultFound'
+
+    return jsonify({'Activities': newlist})
+
+@app.route('/api/v1/workoutprograms/<int:page>', methods=['GET'])
+def workoutprog(page):
+    try:
+        workoutprogs = database.WorkoutPrograms.query.paginate(page, 10, False)
+        records = workoutprogs.items
+        workout_schema = database.WorkoutProgramsSchema(many=True)
+        output = workout_schema.dump(records).data
+
+    except:
+        output = "No Results Found"
+
+    return jsonify({"Workout Programs": output})
+
+@app.route('/api/v1/programroutine', methods=['GET'])
 def progroutine():
     try:
         progroutines = database.ProgramRoutines.query.all()

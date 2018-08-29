@@ -15,11 +15,12 @@
   <div class="navbar-fixed">
     <nav style="background-color:#4a3f9c">
       <div class="nav-wrapper">
-        <a href="{{ url_for('home') }}" class="left hide-on-med-and-down"><img src="{{ url_for('static', filename='images/navaras.png') }}" style="height:60px; width:60px; padding-left: 5px; padding-top:2px; padding-bottom: 2px;"></a>
+        <a href="{{ url_for('home') }}" class="left hide-on-med-and-down"><img src="{{ url_for('static', filename='images/logo.png') }}" style="height:60px; width:60px; padding-left: 5px; padding-top:2px; padding-bottom: 2px;"></a>
 
         <ul class="right hide-on-med-and-down">
+          <li><a href="{{ url_for('minijson', page=1) }}">MinimalJson</a></li>
           <li><a href="{{ url_for('activities') }}">Activities</a></li>
-            <li><a href="{{ url_for('workoutprog') }}">Workout Programs</a></li>
+            <li><a href="{{ url_for('workoutprog', page=1) }}">Workout Programs</a></li>
           <li><a href="{{ url_for('exercises') }}">Exercises</a></li>
         </ul>
       </div>
