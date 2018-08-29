@@ -41,6 +41,7 @@ def home():
         # year=datetime.now().year
     )
 
+@app.route('/workouts')
 @app.route('/api/v1/workouts', methods=['GET'])
 def workouts():
     try:
