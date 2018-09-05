@@ -126,8 +126,12 @@ def exercises(page):
 
 @app.route('/workoutprograms')
 def workoutprogam():
+    try:
+        list = dbsession.query(database.WorkoutPrograms).order_by(database.WorkoutPrograms.name).all()
+    except NoResultFound:
+        None
 
-    return render_template('/woindex.html')
+    return render_template('/woindex.html', wolist=list)
 
 
 @app.route('/workoutprograms/new', methods=['GET', 'POST'])
@@ -144,9 +148,10 @@ def createwop():
         createWorkoutProgram.shortDescription = request.form['shortDescription']
         createWorkoutProgram.type = request.form['type']
         createWorkoutProgram.weeks = request.form['weeks']
+        createWorkoutProgram.activity_id = 3
 
-        # dbsession.add(createWorkoutProgram)
-        # dbsession.commit()
+        dbsession.add(createWorkoutProgram)
+        dbsession.commit()
 
         flash("Workout Program created Successfully!", "Workout")
         return redirect(url_for('workoutprogam'))

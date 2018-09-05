@@ -23,11 +23,7 @@
                     style="height:60px; width:60px; padding-left: 5px; padding-top:2px; padding-bottom: 2px;"></a>
 
             <ul class="right hide-on-med-and-down">
-                <li><a href="{{ url_for('workouts') }}">Shared JSON</a></li>
-                <li><a href="{{ url_for('minijson', page=1) }}">MinimalJson</a></li>
-                <li><a href="{{ url_for('activities') }}">Activities</a></li>
-                <li><a href="{{ url_for('workoutprog', page=1) }}">Workout Programs</a></li>
-                <li><a href="{{ url_for('exercises', page=1) }}">Exercises</a></li>
+                <li><a class='dropdown-trigger btn' href='#' data-target='dropdown2'>APIs</a></li>
                 <li><a class='dropdown-trigger btn' href='#' data-target='dropdown1'>WorkOut</a></li>
             </ul>
         </div>
@@ -37,6 +33,14 @@
     <li><a href="{{ url_for('workoutprogam') }}">Workouts</a></li>
     <li><a href="{{ url_for('createwop') }}">New</a></li>
 </ul>
+<ul id='dropdown2' class='dropdown-content'>
+    <li><a href="{{ url_for('workouts') }}">Shared JSON</a></li>
+    <li><a href="{{ url_for('minijson', page=1) }}">MinimalJson</a></li>
+    <li><a href="{{ url_for('activities') }}">Activities</a></li>
+    <li><a href="{{ url_for('workoutprog', page=1) }}">Workout Programs</a></li>
+    <li><a href="{{ url_for('exercises', page=1) }}">Exercises</a></li>
+</ul>
+
 <!--   Grid Container section   -->
 <div class="row">
     {% block content %}

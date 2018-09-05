@@ -2,19 +2,47 @@
 
 {% block content %}
 
-<div id="index-banner" class="parallax-container">
-    <div class="section no-pad-bot">
-      <div class="container">
-        <br><br>
-        <h1 class="header center teal-text text-lighten-2">Workout Programs</h1>
-        <div class="row center">
-          <h5 class="header col s12 light">Welcome to Workout Programs</h5>
+<!--<div id="index-banner" class="parallax-container">-->
+    <!--<div class="section no-pad-bot">-->
+      <!--<div class="container">-->
+        <!--<br><br>-->
+        <!--<h1 class="header center teal-text text-lighten-2">Workout Programs</h1>-->
+        <!--<div class="row center">-->
+          <!--<h5 class="header col s12 light">Welcome to Workout Programs</h5>-->
+        <!--</div>-->
+
+        <!--<br><br>-->
+
+      <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+  <div class="container">
+    <div class="section">
+      <div class="row">
+          <div class="row center col s12">
+                <strong><h5 style="margin: 20px 0px 0px 0px;">Welcome to Workout Programs</h5></strong>
+          </div>
+        {%  for wo in wolist %}
+
+            <div class="col s12 m6 l3">
+                <div class="card grey darken-2 hoverable">
+                    <div class="card-content white-text">
+                        <span class="card-title">{{ wo.name  | truncate(18, true)}}</span>
+                        <p>{{ wo.name | truncate(150, true) }}</p>
+                    </div>
+                    <div class="card-action">
+
+                        <span class="badges white-text">{{wo.id}}</span>
+                        <span class="badges red-text"><i class="material-icons">favorite</i></span>
+                    </div>
+                </div>
+            </div>
+
+          {% endfor %}
+
         </div>
-
-        <br><br>
-
-      </div>
     </div>
-</div>
+  </div>
 
 {% endblock %}
