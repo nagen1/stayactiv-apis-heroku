@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.append('/app/app.py')
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request, flash, redirect, url_for
 from datetime import datetime
 from taskJson import workoutJson
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
@@ -15,6 +15,7 @@ app = database.app
 
 db_path = os.path.join(os.path.dirname(__file__), 'database/app.db')
 db_uri = 'sqlite:///{}'.format(db_path)
+app.secret_key = 'super_secret_key_230742'
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 
@@ -109,9 +110,50 @@ def progroutine():
 
     return jsonify({"Program Routine": output})
 
-@app.route('/api/v1/exercises')
-def exercises():
-    return "No Data Found"
+@app.route('/api/v1/exercises/<int:page>', methods=['GET'])
+def exercises(page):
+    try:
+        exercisesList = database.Exercises.query.paginate(page, 10, False)
+        records = exercisesList.items
+        exercise_schema = database.ExercisesSchema(many=True)
+        output = exercise_schema.dump(records).data
+
+    except:
+        output = "No Results Found"
+
+    return jsonify({"Exercises": output})
+
+
+@app.route('/workoutprograms')
+def workoutprogam():
+
+    return render_template('/woindex.html')
+
+
+@app.route('/workoutprograms/new', methods=['GET', 'POST'])
+def createwop():
+    if request.method == 'POST':
+        createWorkoutProgram = database.WorkoutPrograms()
+        createWorkoutProgram.name = request.form['title']
+        createWorkoutProgram.bodyPart = request.form['bodyPart']
+        createWorkoutProgram.difficulty = request.form['difficulty']
+        createWorkoutProgram.duration = request.form['duration']
+        createWorkoutProgram.frequency = request.form['frequency']
+        createWorkoutProgram.previewLink = request.form['previewLink']
+        createWorkoutProgram.routine = request.form['routine']
+        createWorkoutProgram.shortDescription = request.form['shortDescription']
+        createWorkoutProgram.type = request.form['type']
+        createWorkoutProgram.weeks = request.form['weeks']
+
+        # dbsession.add(createWorkoutProgram)
+        # dbsession.commit()
+
+        flash("Workout Program created Successfully!", "Workout")
+        return redirect(url_for('workoutprogam'))
+
+    if request.method == 'GET':
+        return render_template('/createwo.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, and_, distinct
+from sqlalchemy import create_engine, and_, distinct, update
 from sqlalchemy.orm import sessionmaker
 from heroku.database import database
 import os
@@ -30,14 +30,33 @@ dbsession = DBSession()
 # alllist = database.Activity.query.\  # this is working but marshmallow is failing
 #     subquery(database.WorkoutPrograms.query.filter(database.WorkoutPrograms.activity_id == 3).limit(5).all())
 
-alllist = dbsession.query(database.Activity).select_from(database.WorkoutPrograms).\
-                join(database.WorkoutPrograms).\
-                filter(database.WorkoutPrograms.id == '10')
+# alllist = dbsession.query(database.Activity).select_from(database.WorkoutPrograms).\
+#                 join(database.WorkoutPrograms).\
+#                 filter(database.WorkoutPrograms.id == '10')
+#
+#
+# activity_schema = database.ActivitySchema(many=True)
+# output = activity_schema.dump(alllist).data
+# print(output)
 
+exercises = database.Exercises.query.all()
 
-activity_schema = database.ActivitySchema(many=True)
-output = activity_schema.dump(alllist).data
-print(output)
+for exercise in exercises:
+    diff = exercise.equipment
+    temp = diff.strip()
+
+    # exercise.difficulty = temp
+    dbsession.query(database.Exercises).filter(database.Exercises.id == exercise.id).update({'equipment': temp})
+
+    dbsession.commit()
+
+dbsession.close()
+# for exercise in exercises:
+#     difficulty = exercise.difficulty
+#     difficult = difficulty.strip()
+#     exercise.difficulty = difficult
+#     #dbsession.update(exercise)
+#     dbsession.commit()
 
 # query = session.query(User, Document, DocumentsPermissions).join(Document).join(DocumentsPermissions)
 # activity = database.Activity.query(database.Activity, database.WorkoutPrograms).filter(database.WorkoutPrograms.id == 3)

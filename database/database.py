@@ -63,7 +63,11 @@ class Exercises(db.Model):
     difficulty = db.Column(db.String, nullable=False)
     type = db.Column(db.String, nullable=False)
     muscle = db.Column(db.String, nullable=False)
+    detailedMuscle = db.Column(db.String)
     routine = db.Column(db.String, nullable=False)
+    otherMuscle = db.Column(db.String)
+    mechanics = db.Column(db.String)
+    equipment = db.Column(db.String)
     previewLink = db.Column(db.String, nullable=False)
     createdDate = db.Column(DateTime, default=datetime.utcnow)
     updatedDate = db.Column(DateTime, onupdate=datetime.utcnow)
@@ -131,6 +135,10 @@ class DailyRoutines(db.Model):
     programroutine_id = db.Column(db.Integer, db.ForeignKey(ProgramRoutines.id), nullable=False)
     programroutine = db.relationship("ProgramRoutines", backref='dailyRoutines', lazy=True)
 
+
+class ExercisesSchema(ma.Schema):
+    class Meta:
+        fields = ("id", "name", 'type', "difficulty", "muscle", 'detailedMuscle', 'otherMuscle', 'mechanics', 'equipment')
 
 class DailyRoutinesSchema(ma.ModelSchema):
     class Meta:

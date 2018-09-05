@@ -1,42 +1,53 @@
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <!--Import Google Icon Font-->
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <!--Import materialize.css-->
-      <!--<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>-->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-      <!--Let browser know website is optimized for mobile-->
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <!--<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{{ url_for('static', filename='scripts/init.js') }}"></script>
+</head>
 
-    <body>
+<body>
 
-  <div class="navbar-fixed">
+<div class="navbar-fixed">
     <nav style="background-color:#4a3f9c">
-      <div class="nav-wrapper">
-        <a href="{{ url_for('home') }}" class="left hide-on-med-and-down"><img src="{{ url_for('static', filename='images/logo.png') }}" style="height:60px; width:60px; padding-left: 5px; padding-top:2px; padding-bottom: 2px;"></a>
+        <div class="nav-wrapper">
+            <a href="{{ url_for('home') }}" class="left hide-on-med-and-down"><img
+                    src="{{ url_for('static', filename='images/logo.png') }}"
+                    style="height:60px; width:60px; padding-left: 5px; padding-top:2px; padding-bottom: 2px;"></a>
 
-        <ul class="right hide-on-med-and-down">
-          <li><a href="{{ url_for('workouts') }}">Shared JSON</a></li>
-          <li><a href="{{ url_for('minijson', page=1) }}">MinimalJson</a></li>
-          <li><a href="{{ url_for('activities') }}">Activities</a></li>
-            <li><a href="{{ url_for('workoutprog', page=1) }}">Workout Programs</a></li>
-          <li><a href="{{ url_for('exercises') }}">Exercises</a></li>
-        </ul>
-      </div>
-    </nav>
-  </div>
-        <!--   Grid Container section   -->
-        <div class="row">
-            {% block content %}
-
-            {% endblock %}
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{{ url_for('workouts') }}">Shared JSON</a></li>
+                <li><a href="{{ url_for('minijson', page=1) }}">MinimalJson</a></li>
+                <li><a href="{{ url_for('activities') }}">Activities</a></li>
+                <li><a href="{{ url_for('workoutprog', page=1) }}">Workout Programs</a></li>
+                <li><a href="{{ url_for('exercises', page=1) }}">Exercises</a></li>
+                <li><a class='dropdown-trigger btn' href='#' data-target='dropdown1'>WorkOut</a></li>
+            </ul>
         </div>
+    </nav>
+</div>
+<ul id='dropdown1' class='dropdown-content'>
+    <li><a href="{{ url_for('workoutprogam') }}">Workouts</a></li>
+    <li><a href="{{ url_for('createwop') }}">New</a></li>
+</ul>
+<!--   Grid Container section   -->
+<div class="row">
+    {% block content %}
+
+    {% endblock %}
+</div>
 
 
-      <!--JavaScript at end of body for optimized loading-->
-      <!--<script type="text/javascript" src="js/materialize.min.js"></script>-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
-    </body>
-  </html>
+<!--JavaScript at end of body for optimized loading-->
+<!--<script type="text/javascript" src="js/materialize.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+</body>
+</html>
