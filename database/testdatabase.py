@@ -39,18 +39,18 @@ dbsession = DBSession()
 # output = activity_schema.dump(alllist).data
 # print(output)
 
-exercises = database.Exercises.query.all()
-
-for exercise in exercises:
-    diff = exercise.equipment
-    temp = diff.strip()
-
-    # exercise.difficulty = temp
-    dbsession.query(database.Exercises).filter(database.Exercises.id == exercise.id).update({'equipment': temp})
-
-    dbsession.commit()
-
-dbsession.close()
+# exercises = database.Exercises.query.all()
+#
+# for exercise in exercises:
+#     diff = exercise.equipment
+#     temp = diff.strip()
+#
+#     # exercise.difficulty = temp
+#     dbsession.query(database.Exercises).filter(database.Exercises.id == exercise.id).update({'equipment': temp})
+#
+#     dbsession.commit()
+#
+# dbsession.close()
 # for exercise in exercises:
 #     difficulty = exercise.difficulty
 #     difficult = difficulty.strip()
@@ -226,3 +226,6 @@ dbsession.close()
 # print(results)
 # # for daily in dailyroutine:
 # #     print(daily.ExerciseName)
+
+exercise = database.Exercises.query.filter(database.Exercises.id == 400).one()
+print(exercise.name)

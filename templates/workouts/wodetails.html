@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="section">
+
+        <!--   Page Content Section   -->
+        <div class="row ">
+            <div class="col s12 m12 l12">
+                <div class="card" style="box-shadow: 0px 0px 0px 0px;">
+                    {% if wodetail: %}
+                    <div class="card-content black-text">
+                        <h5 class="card-title">Name : {{ wodetail.name }}</h5>
+                        <p>Description : {{ wodetail.shortDescription }}</p>
+                    </div>
+                    {% endif %}
+
+
+                    {% if routine: %}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Muscle</th>
+                            <th>Week</th>
+                            <th>Sequence</th>
+                            <th>Day</th>
+                            <th>Duration</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for row in routine %}
+                        <tr>
+                            <td>{{row.Musle}}</td>
+                            <td>{{row.Week}}</td>
+                            <td>{{row.Sequence}}</td>
+                            <td>{{row.Day}}</td>
+                            <td>{{row.Duration}}</td>
+                            <td><a href="{{ url_for('routineDetails', id=row.id)}}">Details</a></td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+
+
+                    {% endif %}
+
+                    <div class="input-field col s12">
+                        <form action="{{ url_for('wodetails', id=wodetail.id)}}" method="POST">
+                            <div class="row">
+                                <div class="input-field col s2">
+                                    <input id="Week" type="text" name="Week" class="validate">
+                                    <label for="Week">Week</label>
+                                </div>
+                                <div class="input-field col s2">
+                                    <input id="Sequence" type="text" name="Sequence" class="validate">
+                                    <label for="Sequence">Sequence</label>
+                                </div>
+                                <div class="input-field col s2">
+                                    <input id="Musle" type="text" name="Musle" class="validate">
+                                    <label for="Musle">Muscle</label>
+                                </div>
+                                <div class="input-field col s2">
+                                    <input id="duration" type="text" name="Duration" class="validate">
+                                    <label for="duration">Duration</label>
+                                </div>
+                                <div class="input-field col s2">
+                                    <select id="day" name="Day">
+                                        <option value="" disabled selected>Choose Day</option>
+                                        <option value="1">Monday</option>
+                                        <option value="2">Tuesday</option>
+                                        <option value="3">Wednesday</option>
+                                        <option value="4">Thursday</option>
+                                        <option value="5">Friday</option>
+                                        <option value="6">Saturday</option>
+                                        <option value="7">Sunday</option>
+                                        <option value="8">AnyDay</option>
+                                        <option value="9">EveryDay</option>
+                                    </select>
+                                </div>
+                                <div class="input-field col s2">
+                                    <input id="PreviewLink" type="text" name="PreviewLink" class="validate">
+                                    <label for="PreviewLink">Preview Link</label>
+                                </div>
+                            </div>
+                            <center>
+                                <div class="container">
+                                    <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                                    </button>
+                                </div>
+                            </center>
+                        </form>
+                    </div>
+
+
+                    <!-- Dropdown Structure -->
+                    <ul id='dropdownDay' class='dropdown-content'>
+                        <li><a href="#!">one</a></li>
+                        <li><a href="#!">two</a></li>
+                        <li class="divider" tabindex="-1"></li>
+                        <li><a href="#!">three</a></li>
+                        <li><a href="#!"><i class="material-icons">view_module</i>four</a></li>
+                        <li><a href="#!"><i class="material-icons">cloud</i>five</a></li>
+                    </ul>
+
+                    {% if comments: %}
+                    <div class="col s12 m12 l12">
+                        <ul class="collection">
+                            {% for comment in comments %}
+                            <li class="collection-item">
+                                <div class="chip">
+                                    {{comment.user.email}}
+                                </div>
+                                {{comment.comment}}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!--   End of Page Content Section   -->
+    </div>
+</div>
+
+{% endblock %}

@@ -84,6 +84,8 @@ class WorkoutPrograms(db.Model):
     shortDescription = db.Column(db.String(50)) # ": "Sample Beginner Program",
     type = db.Column(db.String(50)) # ": "Bulking",
     weeks = db.Column(db.Integer) # ": "4"
+    createdDate = db.Column(DateTime, default=datetime.utcnow)
+    updatedDate = db.Column(DateTime, onupdate=datetime.utcnow)
     activity_id = db.Column(db.Integer, db.ForeignKey(Activity.id), nullable=False)
     activity = db.relationship('Activity', backref='workoutprograms')
 
@@ -167,4 +169,3 @@ class ActivitySchema(ma.ModelSchema):
 class OnlyActivitiesSchema(ma.ModelSchema):
     class Meta:
         fields = ("id", "name", 'iconLink', "previewLink")
-

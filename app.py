@@ -12,17 +12,15 @@ from sqlalchemy.orm import sessionmaker
 
 
 app = database.app
-
-db_path = os.path.join(os.path.dirname(__file__), 'database/app.db')
-db_uri = 'sqlite:///{}'.format(db_path)
 app.secret_key = 'super_secret_key_230742'
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+# db_path = os.path.join(os.path.dirname(__file__), 'database/app.db')
+# db_uri = 'sqlite:///{}'.format(db_path)
+# app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+# engine = create_engine(db_uri)
+# DBSession = sessionmaker(bind=engine)
 
-
-engine = create_engine(db_uri)
-DBSession = sessionmaker(bind=engine)
-dbsession = DBSession()
+dbsession = database.db #DBSession()
 
 # @app.route('/')
 # def hello_world():
@@ -42,7 +40,7 @@ def home():
         # year=datetime.now().year
     )
 
-@app.route('/workouts')
+@app.route('/api/v1/workouts')
 @app.route('/api/v1/workouts', methods=['GET'])
 def workouts():
     try:
@@ -124,14 +122,17 @@ def exercises(page):
     return jsonify({"Exercises": output})
 
 
+# ------------------------- site ---------------------------------
+
 @app.route('/workoutprograms')
 def workoutprogam():
     try:
-        list = dbsession.query(database.WorkoutPrograms).order_by(database.WorkoutPrograms.name).all()
+        # list = dbsession.session.query(database.WorkoutPrograms).order_by(database.WorkoutPrograms.createdDate).limit(5).all()
+        list = dbsession.session.query(database.WorkoutPrograms).order_by(database.WorkoutPrograms.createdDate).all()
     except NoResultFound:
         None
 
-    return render_template('/woindex.html', wolist=list)
+    return render_template('/workouts/woindex.html', wolist=list)
 
 
 @app.route('/workoutprograms/new', methods=['GET', 'POST'])
@@ -150,14 +151,91 @@ def createwop():
         createWorkoutProgram.weeks = request.form['weeks']
         createWorkoutProgram.activity_id = 3
 
-        dbsession.add(createWorkoutProgram)
-        dbsession.commit()
+        dbsession.session.add(createWorkoutProgram)
+        dbsession.session.commit()
 
         flash("Workout Program created Successfully!", "Workout")
         return redirect(url_for('workoutprogam'))
 
     if request.method == 'GET':
-        return render_template('/createwo.html')
+        return render_template('/workouts/createwo.html')
+
+@app.route('/workoutprograms/details/<int:id>', methods=['GET', 'POST'])
+def wodetails(id):
+
+    try:
+        wodetail = database.WorkoutPrograms.query.filter(database.WorkoutPrograms.id == id).one()
+    except:
+        wodetail = 'No Reulst Found'
+
+    try:
+        routine = database.ProgramRoutines.query.filter(database.ProgramRoutines.workoutprogram_id == id).all()
+    except:
+        None
+
+    if request.method == 'POST':
+        createroutine = database.ProgramRoutines()
+        createroutine.workoutprogram_id = id
+        createroutine.Duration = request.form['Duration']
+        createroutine.Day = request.form['Day']
+        createroutine.Musle = request.form['Musle']
+        createroutine.PreviewLink = request.form['PreviewLink']
+        createroutine.Sequence = request.form['Sequence']
+        createroutine.Week = request.form['Week']
+
+        dbsession.session.add(createroutine)
+        dbsession.session.commit()
+
+        return redirect(url_for('wodetails', id=id, wodetail=wodetail, routine=routine))
+
+    else:
+
+        return render_template('/workouts/wodetails.html', wodetail=wodetail, routine=routine)
+
+
+@app.route('/workoutprograms/routine/details/<int:id>', methods=['GET', 'POST'])
+def routineDetails(id):
+
+    try:
+        routine = database.ProgramRoutines.query.filter(database.ProgramRoutines.id == id).one()
+    except:
+        None
+
+    try:
+        wodetails = database.WorkoutPrograms.query.filter(database.WorkoutPrograms.id == routine.workoutprogram_id).one()
+    except:
+        None
+    try:
+        daily = database.DailyRoutines.query.filter(database.DailyRoutines.programroutine_id == id).all()
+        # exercisesList = dbsession.session.query(database.Exercises.muscle).distinct()
+        exercisesList = dbsession.session.query(database.Exercises).order_by(database.Exercises.muscle).all()
+    except:
+        None
+
+    if request.method == 'POST':
+        ExerciseId = request.form['ExerciseId']
+        exercise = database.Exercises.query.filter(database.Exercises.id == ExerciseId).one()
+        daily = database.DailyRoutines()
+        daily.Difficulty = exercise.difficulty
+        daily.Duration = request.form['Duration']
+        daily.ExerciseId = ExerciseId
+        daily.ExerciseName = exercise.name
+        daily.Muscle = exercise.muscle
+        daily.PreviewLink = exercise.previewLink
+        daily.Reps = request.form['Reps']
+        daily.RestTime = request.form['RestTime']
+        daily.Routine = exercise.routine
+        daily.Sequence = request.form['Sequence']
+        daily.Sets = request.form['Sets']
+        daily.Type = exercise.type
+        daily.programroutine_id = id
+
+        dbsession.session.add(daily)
+        dbsession.session.commit()
+
+        return redirect(url_for('routineDetails', routineDetails=routine, wodetails=wodetails, muscle=exercisesList, daily=daily))
+    else:
+        return render_template('/routine/routinedetails.html', routineDetails=routine, wodetails=wodetails, muscle=exercisesList, daily=daily)
 
 
 if __name__ == "__main__":
