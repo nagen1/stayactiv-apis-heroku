@@ -22,15 +22,6 @@ app.secret_key = 'super_secret_key_230742'
 
 dbsession = database.db #DBSession()
 
-# @app.route('/')
-# def hello_world():
-#   return '<body><h2>Welcome to StayActiv</h2>' \
-#          '<ul><li><a href="/activities">Activities</a>' \
-#          '</li><li><a href="/exercises">Exercises</a>' \
-#          '</li><li><a href="/workouts">Workout Programs - API_v0.1</a>' \
-#          '</li><li><a href="/programroutine">Program Routine</a></li>' \
-#          '</li><li><a href="/workoutprograms">Workout Programs - API_v1</a></li>' \
-#          '</ul></body>'
 
 @app.route('/')
 def home():
@@ -40,7 +31,9 @@ def home():
         # year=datetime.now().year
     )
 
-@app.route('/api/v1/workouts')
+
+# ------------------------- Only APIs ---------------------------------
+
 @app.route('/api/v1/workouts', methods=['GET'])
 def workouts():
     try:
@@ -60,9 +53,11 @@ def activities():
     except:
         output = "No Results Found"
 
-    return jsonify({"Workout Programs": output})
+    return jsonify({"Activities": output})
 
 
+# This will deliver the list of activities, workouts and routine in one single Json
+# Effective when used, app goes offline or initial app installation time. Page 1 will be saved along with it
 @app.route('/api/v1/miniJson/<int:page>', methods=['GET'])
 def minijson(page):
     try:
@@ -121,8 +116,10 @@ def exercises(page):
 
     return jsonify({"Exercises": output})
 
+# ------------------------- Only APIs Code End ---------------------------------
 
-# ------------------------- site ---------------------------------
+
+# ------------------------- Web site with UI ---------------------------------
 
 @app.route('/workoutprograms')
 def workoutprogam():
